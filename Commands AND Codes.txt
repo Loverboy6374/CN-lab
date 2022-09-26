@@ -1,0 +1,96 @@
+import numpy as np
+import pandas as pd
+import random
+import matplotlib.pyplot as plt 
+%matplotlib inline
+import warnings
+warnings.filterwarnings("ignore")
+
+df = pd.read_csv("bookss.csv")
+
+print(df)
+
+num_lines
+
+size
+
+df.head()
+
+df.tail()
+
+df.info()
+
+df.describe()
+
+df.isnull().sum()
+
+df.drop(['Publisher'], axis=1, inplace=True)
+
+df['Author'].unique()
+
+df['Author'].mode()
+
+df.isnull().sum()
+
+duplicate_rows_df = df[df.duplicated()]
+print("number of duplicate rows: ", duplicate_rows_df.shape)
+
+df = df.drop_duplicates()
+df.head()
+
+df.count()
+
+df.dtypes
+
+import seaborn as sns
+sns.boxplot(x=df['Height'])
+
+Q1 = df.quantile(0.25)
+Q3 = df.quantile(0.75)
+IQR = Q3 - Q1
+print(IQR)
+
+df = df[~((df < (Q1-1.5 * IQR)) |(df > (Q3 + 1.5 * IQR))).any(axis=1)]
+
+df.shape
+
+df.head()
+
+df.tail()
+
+df.info()
+
+df.hist(column='Height')
+
+df.groupby('Genre').sum()
+
+import matplotlib.pyplot as plt
+
+df.groupby('Genre')['Height'].sum().plot.bar()
+
+sns.distplot(df['Height'])
+
+from sklearn.preprocessing import LabelEncoder
+  
+# label_encoder object knows how to understand word labels.
+label_encoder = LabelEncoder()
+  
+# Encode labels in column 'species'.
+df['Author']= label_encoder.fit_transform(df['Author'])
+df['Genre']= label_encoder.fit_transform(df['Genre'])
+
+X = df[["Author","Genre"]]
+#Visualise data points
+plt.scatter(X["Author"],X["Genre"],c='black')
+plt.xlabel('Author')
+plt.ylabel('Genre')
+plt.show()
+
+from sklearn.cluster import KMeans
+kmeans = KMeans(n_clusters=5)
+kmeans.fit(X)
+y_kmeans = kmeans.predict(X)
+
+y_kmeans
+
+plt.scatter(y_kmeans, df['Author'])
